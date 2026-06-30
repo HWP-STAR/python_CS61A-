@@ -47,3 +47,13 @@ def jie(n):
         return 1
     else:
         return n*jie(n-1)
+    
+def multiply(x,y):
+    assert x>0 and y>0,"Both x and y must be positive integers."
+    n=max(x,y)
+    while True:
+        if n%x==0 and n%y==0:
+            return n
+        n+=1
+
+        
