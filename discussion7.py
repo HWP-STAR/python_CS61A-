@@ -46,10 +46,97 @@ class Button:
     def press(self):
         """Call output on letter (maybe uppercased), then return the button that was pressed."""
         self.pressed += 1
-        "*** YOUR CODE HERE ***"
         if self.caps_lock.pressed % 2 == 1:
-            self.output(self.letter.upper)
+            self.output(self.letter.upper())
         else:
             self.output(self.letter)
-
         return self
+    
+class Keyboard:
+    """A keyboard.
+
+    >>> Button.caps_lock.pressed = 0  # Reset the caps_lock key
+    >>> bored = Keyboard()
+    >>> bored.type('hello')
+    >>> bored.typed
+    ['h', 'e', 'l', 'l', 'o']
+    >>> bored.keys['l'].pressed
+    2
+
+    >>> Button.caps_lock.press()
+    >>> bored.type('hello')
+    >>> bored.typed
+    ['h', 'e', 'l', 'l', 'o', 'H', 'E', 'L', 'L', 'O']
+    >>> bored.keys['l'].pressed
+    4
+    """
+    def __init__(self):
+        self.typed = []
+        self.keys = {c:Button(c,self.typed.append) for c in LOWERCASE_LETTERS} # Try a dictionary comprehension!
+
+    def type(self, word):
+        """Press the button for each letter in word."""
+        assert all([w in LOWERCASE_LETTERS for w in word]), 'word must be all lowercase'
+        "*** YOUR CODE HERE ***"
+        for i in word:
+            self.keys[i].press()
+     
+# Q3
+class Eye:
+    """An eye.
+
+    >>> Eye().draw()
+    '0'
+    >>> print(Eye(False).draw(), Eye(True).draw())
+    0 -
+    """
+    def __init__(self, closed=False):
+        self.closed = closed
+
+    def draw(self):
+        if self.closed:
+            return '-'
+        else:
+            return '0'
+
+class Bear:
+    """A bear.
+
+    >>> Bear().print()
+    ? 0o0?
+    """
+    def __init__(self):
+        self.nose_and_mouth = 'o'
+
+    def next_eye(self):
+        return Eye()
+
+    def print(self):
+        left, right = self.next_eye(), self.next_eye()
+        print('? ' + left.draw() + self.nose_and_mouth + right.draw() + '?')
+
+class SleepyBear(Bear):
+    """A bear with closed eyes.
+
+    >>> SleepyBear().print()
+    ? -o-?
+    """
+    "*** YOUR CODE HERE ***"
+    def next_eye(self):
+        return Eye(True)
+
+class WinkingBear(Bear):
+    """A bear whose left eye is different from its right eye.
+
+    >>> WinkingBear().print()
+    ? -o0?
+    """
+    def __init__(self):
+        "*** YOUR CODE HERE ***"
+        super().__init__()
+        self.eye_calls=0
+
+    def next_eye(self):
+        "*** YOUR CODE HERE ***"
+        self.eye_calls+=1
+        return Eye(self.eye_calls % 2 )
